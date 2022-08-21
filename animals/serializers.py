@@ -40,16 +40,20 @@ class AnimalSerializer(serializers.Serializer):
 
         return animals    
 
-    def update(self, data: dict):
+    def update(self, instance:Animal ,validation_data: dict):
 
-        grupo = data.pop("group")
-        traits = data.pop("traits")
-
-        animals = Animal.objects.create(**data, group = afiliacao)
+        non_updated = ["sex", "traits", "group"]
+        errors = []
         
-        for trait in traits:
-            mania,_ = Trait.objects.patch_or_update(**trait)
-            animals.traits.add(mania) 
+        for key, value in validation_data.items():
+            if key in non_updated:
+                errors.append({f'{key}':f'You can not update {key} property'})
+            else:
+                setattr(instance, key, value)
+        if len(errors) > 0:
+            raise KeyError(errors, 422)
+        
+        instance.save()
 
-        return animals    
+        return instance
 
