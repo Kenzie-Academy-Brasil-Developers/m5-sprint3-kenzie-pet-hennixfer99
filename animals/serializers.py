@@ -13,7 +13,7 @@ class AnimalSerializer(serializers.Serializer):
     name = serializers.CharField()
     age = serializers.IntegerField()
     weight = serializers.FloatField()
-    sex = serializers.ChoiceField(choices = Sex.choices, default = Sex.undefined)
+    sex = serializers.ChoiceField(choices = Sex.choices, default = Sex.undefined) 
     idade_humana = serializers.SerializerMethodField("age_in_human_year")
 
     def age_in_human_year(self, data: Animal):
